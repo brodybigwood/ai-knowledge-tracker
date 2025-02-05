@@ -1,0 +1,89 @@
+TOPIC RELATIONSHIP DETERMINATION PROTOCOL
+PURPOSE: Determine the relationship between new topics and existing topics in terms of hierarchy or equivalence.
+
+EQUIVALENCE CRITERIA
+Two topics are equivalent ONLY IF:
+1. Core Concept Match - Same fundamental idea, regardless of phrasing
+2. Hierarchy Level Match - Same specificity tier (root vs. sub-branch vs. sub-sub-branch)
+
+HIERARCHY CRITERIA
+- A topic is considered a parent of another if it is more general in scope.
+- A topic is considered a child of another if it is more specific in scope.
+- Hierarchy indicators include terms like "Intro to", "Advanced", "Fundamentals of", etc.
+
+RULES
+- IGNORE THESE DIFFERENCES:
+  * Plurals/singulars (Algorithm vs Algorithms)
+  * Word order (Data Analysis vs Analysis of Data)
+  * Formatting/spacing (MachineLearning vs Machine Learning)
+  * Common synonyms (AI vs Artificial Intelligence)
+- REQUIRE THESE MATCHES:
+  * Same conceptual scope (Basic Math ≠ Linear Algebra)
+  * Same hierarchy position (Intro to X ≠ Advanced X ≠ X)
+
+INPUT FORMAT
+{
+  "proposed_topics": ["Topic A", "Topic B"],
+  "existing_topics": ["Topic 1", "Topic 2"]
+}
+
+OUTPUT SPECIFICATION
+For each proposed topic, include the following in the output JSON:
+- If equivalent to any existing nodes: {'name': "topic name", 'status':[{"equivalent_to": ["Matching Topic Names"]}]}
+- If no equivalent and no hierarchy relationship for any existing nodes: {'name': "topic name","status": ['unique']}
+- If hierarchical relationship with any nodes:
+  * {'name': "topic name", 'status': [{"has_parents": ["Matching Topic Names"]}]} (if the existing topic is more general)
+  * {'name': "topic name", 'status': [{"has_children": "[Matching Topic Names"]}]} (if the existing topic is more specific)
+- ALL nodes should be objects separated by single commas, and enclosed in square brackets as a list.
+
+HIERARCHY DETECTION
+- Sub-branch indicators: Terms like "Intro to", "Advanced", "Fundamentals of".
+- Use judgement to determine if a topic is a subtopic of another.
+- Level determination:
+  * Root: No hierarchy indicators
+  * Sub-branch: Contains 1 hierarchy term
+  * Sub-sub-branch: Contains 2+ hierarchy terms
+
+EXAMPLE OUTPUT
+{
+  'name': topic_a,
+  'status': ['unique']
+}
+{
+  'name': topic_b,
+  'status': [{'equivalent_to': [
+      topic 1, topic 2, etc
+    ]}]
+}
+{
+  'name': topic_c,
+  'status': [{'has_children': [
+      topic 3, topic 4, etc
+    ]}]
+}
+{
+  'name': topic_d,
+  'status': [{'has_parents': [
+      topic 5, topic 6, etc
+    ]}]
+}
+
+for a proposed topic that relates to multiple of the existing topics:
+
+{
+  "name": wide_topic,
+  "status": [
+      {"has_parents": [
+        topic 5, topic 6, etc
+        ]
+      },
+      {"has_children": [
+        topic 3, topic 4, etc
+        ]
+      },
+      {"equivalent_to": [
+        topic 1, topic 2, etc
+        ]
+      }
+    ]
+}

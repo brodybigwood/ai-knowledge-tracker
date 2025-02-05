@@ -1,0 +1,47 @@
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+*.so
+
+# Ignore virtual environments
+venv/
+env/
+
+#ignore test scripts
+tests/
+
+# Ignore environment variables & secrets
+.env
+
+# Ignore log files
+*.log
+
+# Ignore database files
+*.sqlite3
+*.db
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore OS-generated files
+.DS_Store
+Thumbs.db
+
+# Ignore compiled files
+*.o
+*.out
+*.exe
+
+# Ignore VS Code settings (if using VS Code)
+.vscode/
+
+# Ignore JetBrains IDE files (PyCharm, IntelliJ)
+.idea/
+
+# Ignore dependency caches (e.g., pipenv, poetry)
+Pipfile.lock
+poetry.lock
+
+# Ignore test coverage reports
+.coverage
+htmlcov/
